@@ -12,14 +12,25 @@ public class Gear : MonoBehaviour
     public float direction;
     private float gearRatio; // driver/driven
 
+    public Rigidbody2D rb;
+
     // remember to handle none previous gears
-    
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>(); // so that physics applies to rotation
+
+        // Rigidbody2D setup for torque-driven rotation:
+        // Make sure Rigidbody2D is Dynamic, no gravity, and freeze X and Y position so it only rotates
+        rb.gravityScale = 0;
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
+    }
+
     void Start()
     {
         if (!isDriver)
         {
             // set gear ratio
-            gearRatio =  teethNumber / prevGear.teethNumber;
+            gearRatio = teethNumber / prevGear.teethNumber;
 
             // rotate this driver by driver speed
         }
@@ -29,14 +40,18 @@ public class Gear : MonoBehaviour
     void Update()
     {
         // Do the stuff
-        
+    }
+
+    void FixedUpdate()
+    {
+        // So now fixed update must be used so it works with the physics
         if (!isDriver)
         {
             direction = -1 * prevGear.direction;
             speed = prevGear.speed / gearRatio;
         }
-        
-        transform.Rotate(0f, 0f, speed * direction * Time.deltaTime);
 
+        // Instead of using MoveRotation, set angular velocity so physics applies torque-based rotation
+        rb.angularVelocity = speed * direction;
     }
 }
