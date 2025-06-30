@@ -71,6 +71,10 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.CompareTag("Gear"))
         {
             isGrounded = false;
+            audioSource.Play();
+
         }
+
     }
 }
+
