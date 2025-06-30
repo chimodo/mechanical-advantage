@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
         Vector2 jumpForce = new Vector2(horizontalForce, verticalForce);
 
-        rb.velocity = Vector2.zero; // cancel previous momentum
+        rb.linearVelocity = Vector2.zero; // cancel previous momentum
         rb.AddForce(jumpForce, ForceMode2D.Impulse);
 
     }
